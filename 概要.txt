@@ -1,0 +1,102 @@
+/joinsbot
+  .gitignore
+  run.py
+  /app
+    __init__.py 
+    config.py
+    /main
+      __init__.py
+      forms.py
+      routes.py
+      models.py
+      embeddings.py
+      cosine_similarity.py
+      faq_dao.py
+    /templates
+      home.html
+      results.html
+  requirements.txt
+
+
+要件定義
+1. 目的
+このプロジェクトの目的は、ユーザーの質問に対して関連性の高いFAQを提示するシナリオ型チャットボットを作成することです。ボットは、chatgpt apiのエンベッディング機能とPostgresデータベースの近似最近傍検索機能を活用します。
+
+2. 基本機能
+ユーザーが質問を入力すると、その質問がchatgpt apiによってエンベッディングされます（このエンベッディングはデータベースに保存されません）。
+同じように、すでにあるFAQもchatgpt apiでエンベッディングされ、その結果はPostgresデータベースに保存されます。
+ユーザーの質問のエンベッディングとFAQのエンベッディングとの間でコサイン類似度を計算し、その結果をランキング表示します。表示は上位20件までとします。
+コサイン類似度の計算とランキング表示には、Postgresデータベースの近似最近傍検索機能を活用します。
+3. 使用技術
+Python: Flask
+データベース: PostgreSQL
+テキストエンベッディング: chatgpt api
+
+※
+手順
+・helloworld、チャットボット画面の表示
+・DBとの接続とmodels.pyとmigrationsの設定
+・QA登録画面の作成とDBに本当に入るかの確認。
+・入力時エンベッディング機能の追加。登録した時にちゃんとエンベッディングされて登録されるか。
+・検索時エンベッディング機能＋マッチング機能の追加。確認を押した時に類似のものが表示されるか。
+
+
+
+テーブル設計
+
+FAQテーブル:
+カラム名	データ型	説明
+id	INT	各FAQのユニークなID。主キー。
+question	TEXT	FAQの質問内容
+answer	TEXT	FAQの回答内容
+question_embedding	REAL[]	質問のGPT-4によるエンベッディング。各要素は浮動小数点数
+question_length	INT	質問の文字数
+question_tokens	INT	質問のトークン数（言語に依存）
+enable_flag	INT	削除フラグ
+created_at	DATE	生成日時
+updated_at	DATE	変更日時
+
+※FAQテーブルのembeddingカラムに対してANNインデックスを作成。これにより、コサイン類似度の計算とランキング表示が高速化。
+CREATE INDEX faq_embedding_idx ON faq USING gist (question_embedding gist_trgm_ops);
+
+
+
+import os
+os.environ["OPENAI_API_KEY"] = "openaiのキー"
+
+import openai
+
+response = openai.Embedding.create(
+	input=text,
+	model="text-embedding-ada-002"
+)
+print(len(response["data"][0]["embedding"]))
+print(response["data"][0]["embedding"])
+print(response)
+
+としたら
+1536
+[[-0.0019341740990057588, -0.011006913147866726,...]]
+{
+	"data":[
+	{
+	"embedding":[
+		-0.0019213526975363493,
+		-0.011027459055185318,
+		-0.002350487280637026,
+			・
+			・
+		-0.0032607729081064463
+		],
+		"index":0,
+		"object":"embedding"
+	}
+	],
+	"model":"text-embedding-ada-002-v2",
+	"object":"list",
+	"usage": {
+		"prompt_tokens": 6,
+		"total_tokens": 6
+	}
+}
+と出力されます。

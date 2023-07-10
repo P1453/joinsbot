@@ -1,0 +1,22 @@
+<!-- \templates\index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JOINS BOT</title>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+<body>
+    <div id="chat-container">
+        <h1>チャットをしましょう！</h1>
+        <div id="chatbox">
+            <p class="botText" id="botStarterMessage">こんにちは。あなたをお助けできることはありますか？</p>
+        </div>
+        <div id="user-input-section">
+            <input id="textInput" type="text" name="msg" placeholder="何か質問してください...">
+            <input id="buttonInput" type="button" value="送る" onclick="getBotResponse()">
+        </div>
+    </div>
+    <script src="static/script.js"></script>
+</body>
+</html>

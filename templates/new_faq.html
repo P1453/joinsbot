@@ -1,0 +1,30 @@
+<!-- templates/new_faq.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新規FAQ</title>
+</head>
+<body>
+    <h1>新規FAQの作成</h1>
+    <form action="/faq/new" method="post">
+        <label for="question">質問:</label><br>
+        <input type="text" id="question" name="question"><br>
+        <label for="answer">回答:</label><br>
+        <textarea id="answer" name="answer"></textarea><br>
+        <label for="question_embedding">Question Embedding (comma-separated floats):</label><br>
+        <input type="text" id="question_embedding" name="question_embedding"><br>
+        <label for="question_length">Question Length:</label><br>
+        <input type="number" id="question_length" name="question_length"><br>
+        <label for="question_tokens">Question Tokens:</label><br>
+        <input type="number" id="question_tokens" name="question_tokens"><br>
+        <label for="enable_flag">Enable Flag:</label><br>
+        <input type="number" id="enable_flag" name="enable_flag"><br>
+        <label for="created_at">Created At:</label><br>
+        <input type="datetime-local" id="created_at" name="created_at"><br>
+        <label for="updated_at">Updated At:</label><br>
+        <input type="datetime-local" id="updated_at" name="updated_at"><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
