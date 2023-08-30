@@ -3,3 +3,9 @@ Flask-SQLAlchemy
 psycopg2-binary
 Flask-Migrate
 python-dotenv
+pgvector-python
+pgvector
+numpy sqlalchemy
+scipy
+faiss-cpu
+faiss-gpu
